@@ -6,6 +6,7 @@ tolueneFiles/
 # Extra components (debugging)
 baseCalibration.py
 debug.py
+testing.py
 
 # Old versions
 versions/
