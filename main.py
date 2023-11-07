@@ -1,8 +1,11 @@
 # %% VERSION
 # ALPHA: first testing version
-#   Funguje pro mřížku 1200 (1), pro mřížku 1800 (2) chybí referenční pixelové hodnoty pásů. (row 90,91), (userInput, row 53)
-#   Má problém s fitováním doubletu na kraji spektra. (dataProcessing, row 57)
+#   DONE    Funguje pro mřížku 1200 (1), pro mřížku 1800 (2) chybí referenční pixelové hodnoty pásů.
+#       Přidány a upraveny referenční hodnoty pro obě mřížky
+#   DONE    Má problém s fitováním doubletu na kraji spektra. (dataProcessing, row 57)
+#       Opraven interval ve kterém se fitoval pás (původně se fitoval přes celé spektrum)
 #   Neprobíhají kontroly nahraných souborů!
+
 print("!!! verze ALPHA: první testovací verze")
 print("Kalibrace pouze pro mřížku 1200 vrypů/mm a pro soubory CSV.")
 print("Výstup ve formátu TXT.")
@@ -87,8 +90,7 @@ dataSpectra = asarray(dataSpectra)
 if grid == 1:
     referencePath = "referenceValues/toluenReference1200.csv"
 else:
-    print("Zatím funguje pouze mřížka 1200 (1).")
-    referencePath = "referenceValues/toluenReference1200.csv"
+    referencePath = "referenceValues/toluenReference1800.csv"
 referencePath = os.path.join(bundleDirectory, referencePath)
 referencePeaks = loadReferencePeaks(referencePath)
 

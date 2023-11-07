@@ -54,10 +54,10 @@ def calibrateData(calibrationSpectrum, referencePeaks):
             averageRight = np.average(intensities[noiseIntervalRight])
             sigmaRight = np.std(intensities[noiseIntervalRight], ddof=1)
 
-        if intervalSizeLeft < 5:
+        if intervalSizeLeft <= 5:
             average = averageRight
             sigma = sigmaRight
-        elif intervalSizeRight < 5:
+        elif intervalSizeRight <= 5:
             average = averageLeft
             sigma = sigmaLeft
         elif averageLeft < averageRight:

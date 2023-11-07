@@ -50,7 +50,7 @@ def userInputGrid():
     while True:
         grid = input("Zvol použitou mřížku: 1200 (1), 1800 (2)")
         if grid in ["1", "2", ""]:
-            if grid in ["2", ""]:
+            if grid in [""]:
                 grid = 1
             else:
                 grid = int(grid)
