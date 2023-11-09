@@ -108,10 +108,10 @@ def calibrateData(calibrationSpectrum, referencePeaks):
     minShift = referencePeaks[0][0] - newPeaks[0][0] - 100
     maxShift = referencePeaks[-1][0] - newPeaks[-1][0] + 100
 
-    maxShoda = -1
+    maxAgreement = -1
     for shift in np.arange(minShift, maxShift + 0.5, 0.5):
         nearestPeaks = []
-        shoda = 0
+        agreement = 0
         lastWeight = 1
         for peak, _ in newPeaks:
             minDistance = -1  # ještě zkusit najít lepší způsob!!!
@@ -122,15 +122,15 @@ def calibrateData(calibrationSpectrum, referencePeaks):
                     nearestPeak = [peak, referenceWavelength, distance]
                 else:
                     weight = 10 / (1 + nearestPeak[2] ** 2)
-                    shoda += weight * lastWeight
+                    agreement += weight * lastWeight
                     lastWeight = weight
                     nearestPeaks.append(nearestPeak)
                     break
-        if shoda > maxShoda or maxShoda == -1:
-            maxShoda = shoda
+        if agreement > maxAgreement or maxAgreement == -1:
+            maxAgreement = agreement
             bestShiftValues = {
                 "shift": shift,
-                "shoda": shoda,
+                "agreement": agreement,
                 "assignedPeaks": nearestPeaks,
             }
 

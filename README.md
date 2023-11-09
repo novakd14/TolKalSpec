@@ -14,3 +14,11 @@ value as 10/(1+dist\*\*2). Highest sum of agreement value from each peak marks t
 # Output
 
 Calibrated spectra are outputted in TXT format with columns separated by white space. For single calibration spectrum there is option to ouput data in one file with first column as wavenumbers and the remaining columns as calibrated spectra.
+
+# To-Do List
+
+- Check peaks assignment (quality of fit, agreement)
+- Exceptions handeling
+- Faster loading
+- Smaller EXE files
+- Add possible SPE file input
