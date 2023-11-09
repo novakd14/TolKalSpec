@@ -9,7 +9,8 @@ def gaussian(x, a, b, c, d):
 
 
 def calibrateData(calibrationSpectrum, referencePeaks):
-    pixels = calibrationSpectrum[0]
+    pixels = [int(pixel) for pixel in calibrationSpectrum[0]]
+    axis = calibrationSpectrum[0]
     intensities = calibrationSpectrum[1]
 
     # Find peaks in calibration spectrum
@@ -107,10 +108,11 @@ def calibrateData(calibrationSpectrum, referencePeaks):
     minShift = referencePeaks[0][0] - newPeaks[0][0] - 100
     maxShift = referencePeaks[-1][0] - newPeaks[-1][0] + 100
 
-    minTotalDistance = -1
+    maxShoda = -1
     for shift in np.arange(minShift, maxShift + 0.5, 0.5):
         nearestPeaks = []
-        totalDistance = 0
+        shoda = 0
+        lastWeight = 1
         for peak, _ in newPeaks:
             minDistance = -1  # ještě zkusit najít lepší způsob!!!
             for referencePeak, referenceWavelength in referencePeaks:
@@ -119,14 +121,16 @@ def calibrateData(calibrationSpectrum, referencePeaks):
                     minDistance = distance
                     nearestPeak = [peak, referenceWavelength, distance]
                 else:
-                    totalDistance += nearestPeak[2]
+                    weight = 10 / (1 + nearestPeak[2] ** 2)
+                    shoda += weight * lastWeight
+                    lastWeight = weight
                     nearestPeaks.append(nearestPeak)
                     break
-        if totalDistance < minTotalDistance or minTotalDistance == -1:
-            minTotalDistance = totalDistance
+        if shoda > maxShoda or maxShoda == -1:
+            maxShoda = shoda
             bestShiftValues = {
                 "shift": shift,
-                "totalDistance": totalDistance,
+                "shoda": shoda,
                 "assignedPeaks": nearestPeaks,
             }
 
@@ -141,14 +145,20 @@ def calibrateData(calibrationSpectrum, referencePeaks):
                 del assignedPeaks[i]
         else:
             i += 1
-    assignedPeaks = np.asarray(assignedPeaks)
+    pixelPeaks, assignedPeaks, _ = np.asarray(assignedPeaks).T
 
     # Fit of assigned wavenumbers by a polynomyial
-    calibFunction = Polynomial.fit(assignedPeaks.T[0], assignedPeaks.T[1], 3)
-    calibratedAxis = calibFunction(pixels)
+    calibFunction, [residuals, _, _, _] = Polynomial.fit(
+        pixelPeaks, assignedPeaks, 3, full=True
+    )
+    calibratedAxis = calibFunction(axis)
+
+    # Goodness of fit
+    totalSumSquares = ((assignedPeaks - np.mean(assignedPeaks)) ** 2).sum()
+    rSquared = 1 - residuals / totalSumSquares
 
     # RETURN
-    return calibratedAxis
+    return (calibratedAxis, bestShiftValues["shift"], rSquared)
 
 
 def interpolateData(axis, spectrum):

@@ -11,6 +11,9 @@ testing.py
 # Old versions
 versions/
 
+# VSCode
+.vscode/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
