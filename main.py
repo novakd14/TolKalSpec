@@ -16,6 +16,7 @@ print('Pro společné kalibrační spektrum pojmenovat kalibrační souboru "kal
 print(
     'V případě specifických kalibračních spekter pro každé naměřené spektrum, přidat před jejich jméno "k" ("kjmeno.csv").'
 )
+print('Kalibrované spektra jsou uložené ve složce "CalibratedSpectra".')
 print("-" * 60)
 
 # %% IMPORT
