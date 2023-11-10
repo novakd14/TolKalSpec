@@ -85,13 +85,16 @@ def calibrateData(calibrationSpectrum, referencePeaks):
         ]
 
         # Fit of peak
-        fitInterval = slice(leftIndex, rightIndex)
-        fit, _ = curve_fit(
-            gaussian,
-            pixels[fitInterval],
-            intensities[fitInterval],
-            initialParameters,
-        )
+        try:
+            fitInterval = slice(leftIndex, rightIndex)
+            fit, _ = curve_fit(
+                gaussian,
+                pixels[fitInterval],
+                intensities[fitInterval],
+                initialParameters,
+            )
+        except:
+            continue
 
         # Discrad the peak if its position falls out of the original interval
         if (fit[1] < pixels[leftIndex] or fit[1] > pixels[rightIndex]) or (
